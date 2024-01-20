@@ -3,16 +3,21 @@ const bodyParser = require('body-parser');
 const app = express();
 var cors = require('cors');
 const mongooseConnect = require('./helpers/moongose-connection');
+const notesRouter = require('./routes/notesRouter');
+const userRouter = require('./routes/userRouter');
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use((_, res) =>{
-res.send({
-message: 'Not found!'
-})
-});
+// app.use((_, res) =>{
+// res.send({
+// message: 'Not found!'
+// })
+// });
+
+app.use("/notes", notesRouter );
+app.use("/user", userRouter );
 
 mongooseConnect();
 

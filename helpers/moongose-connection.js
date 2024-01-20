@@ -1,14 +1,13 @@
-
 const mongoose = require('mongoose');
+require('dotenv').config()
+const password = process.env.MONGODB_PASSWORD;
+const user = process.env.MONGODB_USER;
 
-// Replace 'your_database_url' with the actual URL of your MongoDB database
-const databaseUrl = 'mongodb://localhost:27017';
+//DB connection:
+const databaseUrl = `mongodb+srv://${user}:${password}@cluster0.sre7ibb.mongodb.net/?retryWrites=true&w=majority`;
 
 function mongooseConnect(){
-    mongoose.connect(databaseUrl, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
+    mongoose.connect(databaseUrl)
       .then(() => {
         console.log('Connected to the database');
       })
