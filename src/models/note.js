@@ -15,11 +15,11 @@ const noteSchema = new Schema({
         default:Date.now
     },
     user:{
-        type:Schema.Types.ObjectId,
+        type:String,
         ref:"User",
         required:true
     },
-    reminder:[
+    reminder:
         {
             active:{
                 type:Boolean,
@@ -30,16 +30,20 @@ const noteSchema = new Schema({
                 type:Date,
                 default : Date.now
             },
-            mode:{
+            notification_type:{
                 type:String,
-                required:true,
-                default:"email"
+                required:false,
+                default:""
             }
         }
-    ],
+    ,
     category:{
-        type:String,
+        type:Number,
         required:true
+    },
+    active:{
+        type:Boolean,
+        default:true
     }
 })
 
