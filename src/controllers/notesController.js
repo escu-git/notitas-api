@@ -1,7 +1,16 @@
 const Note = require('../models/note.js')
 
 const notesController ={
-    getNotasById : () =>{
+    getAllNotes: async (req, res)=>{
+        try{
+            const query = Note.where({active:true})
+            const notas = await query.find({})
+            res.status(200).send({message:"Notes found", data: notas, status:200})
+        }catch(err){
+            console.log(err)
+        }
+    },
+    getNotasById : async(req, res) =>{
         console.log("Accediste a la ruta /getNotasById")
     },
     createNota:async (data, res)=>{
@@ -20,11 +29,11 @@ const notesController ={
     
             datos.save()
             .then(noteData=>res.status(200)
-            .send({message:"Note created succesfully", data: noteData}));
+            .send({message:"Note created succesfully", data: noteData, status:200}));
         }
         catch(error){
             res.status(400)
-            .send({message:"Note could not be created", error:error})
+            .send({message:"Note could not be created", error:error, status:400})
         }
     },
     updateNota: async(data, res)=>{
@@ -44,16 +53,19 @@ const notesController ={
             .then(noteData=>res.status(200).send({message:"Note updated succesfully", data: noteData}));
         }
         catch(error){
-            res.
             res.status(400).send({message:"Note could not be updated", error:error})
         }
     },
-    deleteNota: async(id, res)=>{
-        try{
-            // const nota = await Note.updateOne()
-        }
-        catch(err){
-
+    deleteNote: async(id, res)=>{
+        try {
+            const doc = await Note.updateOne({ _id: id }, { $set: { active: false } });
+            if (doc.nModified === 0) {
+                res.status(404).json({ message: "Note not found", status: 404 });
+            } else {
+                res.status(200).json({ message: "Note deleted successfully", data: doc, status: 200 });
+            }
+        } catch (err) {
+            res.status(400).json({ message: "Note could not be deleted", error: err.message, status: 400 });
         }
     }
 }

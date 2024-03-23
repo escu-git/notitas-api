@@ -44,6 +44,10 @@ const noteSchema = new Schema({
     active:{
         type:Boolean,
         default:true
+    },
+    _id:{
+        type:String,
+        required:false
     }
 })
 

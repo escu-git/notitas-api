@@ -1,5 +1,7 @@
 const authRouter = require('express').Router();
 const passport = require('passport');
+const sessionData = require('express-session');
+
 
 const UI_URL = process.env.UI_URL;
 
@@ -15,7 +17,7 @@ authRouter.get('/login/google', passport.authenticate('google', {
 }));
 
 authRouter.get('/google/callback', passport.authenticate('google', {
-    successRedirect: `${UI_URL}`,
+    successRedirect: `${UI_URL}/auth/callback`,
     failureRedirect: '/login/failed'
 }));
 
@@ -35,11 +37,16 @@ authRouter.get('/currentUser', function(req, res) {
   }
 })
 
-authRouter.get("/logout", (req, res) => {
-  req.logout(req.user, err => {
-    if(err) return next(err);
-    res.redirect(`${UI_URL}`);
-  });
+authRouter.post("/logout", (req, res, next) => {
+  console.log(sessionData.Cookie.name)
+ res.clearCookie('session');  // clear the session cookie
+	req.logout(function(err) {  // logout of passport
+		req.session.destroy(function (err) { // destroy the session
+  console.log(sessionData.Cookie())
+      res.redirect(`${UI_URL}/login`)
+			// res.send(); // send to the client
+		});
+	});
 });
 
 module.exports = authRouter;
