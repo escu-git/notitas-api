@@ -37,16 +37,18 @@ authRouter.get('/currentUser', function(req, res) {
   }
 })
 
-authRouter.post("/logout", (req, res, next) => {
-  console.log(sessionData.Cookie.name)
- res.clearCookie('session');  // clear the session cookie
-	req.logout(function(err) {  // logout of passport
-		req.session.destroy(function (err) { // destroy the session
-  console.log(sessionData.Cookie())
-      res.redirect(`${UI_URL}/login`)
-			// res.send(); // send to the client
-		});
-	});
+authRouter.get("/logout", (req, res, next) => {
+  req.logout(function(err){
+    req.session.destroy(function (err) {
+      if (!err) {
+          res.status(200).clearCookie('connect.sid', {path: '/'}).json({status: "Success"});
+      } else {
+          console.log(err)
+          res.status(400).send({message:'Hubo un error, y volvió por el else de /logout', err:err})
+      }
+  });
+  });
+  
 });
 
 module.exports = authRouter;

@@ -11,13 +11,14 @@ const notesRouter = require('./src/routes/notesRouter');
 const userRouter = require('./src/routes/userRouter');
 const auth = require('./src/helpers/auth');
 require('dotenv').config();
+const cookies = require("cookie-parser");
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
+app.use(cookies());
 app.use(cors());
 
 app.use(sessionData({
-    name:'session',
     secret:process.env.SESSION,
     resave:false,
     saveUninitialized:true,
@@ -36,11 +37,18 @@ app.use(cors({
 
 }))
 //Auth
-app.use("/auth", authRouter);
+app.use("/auth", (req, res, next) => {
+    console.log('----- /AUTH INFO:------')
+    console.log("Session data:", req.session);
+    console.log("Cookies:", req.cookies);
+    console.log('-----------------------')
+    next();
+  }, authRouter);
 
 // app.use("/*", auth.checkLoggedUser); //Check if the user is logged in to access any route except / and /register
 app.use("/notes", notesRouter );
 app.use("/user", userRouter );
+
 
 mongooseConnect();
 
