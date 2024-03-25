@@ -45,10 +45,11 @@ const noteSchema = new Schema({
         type:Boolean,
         default:true
     },
-    _id:{
-        type:String,
-        required:false
-    }
+    // _id:{
+    //     type:String,
+    //     required:false
+        
+    // }
 })
 
 module.exports = mongoose.model('Note', noteSchema );
