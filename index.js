@@ -16,7 +16,12 @@ const cookies = require("cookie-parser");
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(cookies());
-app.use(cors());
+//Config CORS:
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+    methods:"GET,POST,PUT,DELETE"
+}))
 
 app.use(sessionData({
     secret:process.env.SESSION,
@@ -29,13 +34,7 @@ app.use(sessionData({
 app.use(passport.initialize());
 app.use(passport.session());
 
-//Config CORS:
-app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true,
-    methods:"GET,POST,PUT,DELETE"
 
-}))
 //Auth
 app.use("/auth", (req, res, next) => {
     console.log('----- /AUTH INFO:------')

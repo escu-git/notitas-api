@@ -3,7 +3,8 @@ const Note = require('../models/note.js')
 const notesController ={
     getAllNotes: async (req, res)=>{
         try{
-            const query = Note.where({active:true})
+            const user = req.user?.email;
+            const query = Note.where({active:true, user:user})
             const notas = await query.find({})
             res.status(200).send({message:"Notes found", data: notas, status:200})
         }catch(err){
@@ -56,8 +57,14 @@ const notesController ={
             res.status(400).send({message:"Note could not be updated", error:error})
         }
     },
-    deleteNote: async(id, res)=>{
+    deleteNote: async(id,req, res)=>{
         try {
+            const user = req.user?.email;
+            const noteToBeDeleted = await Note.findById({_id:id});
+            if(noteToBeDeleted.user != user){
+                res.status(401).json({ message: "Not allowed to delete this note", error: err.message, status: 400 });
+            }
+            
             const doc = await Note.updateOne({ _id: id }, { $set: { active: false } });
             if (doc.nModified === 0) {
                 res.status(404).json({ message: "Note not found", status: 404 });
