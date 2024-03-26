@@ -14,8 +14,9 @@ const notesController ={
     getNotasById : async(req, res) =>{
         console.log("Accediste a la ruta /getNotasById")
     },
-    createNota:async (data, res)=>{
+    createNota:async (req, res)=>{
         try{
+            const data = req.body;
             const datos = new Note({
                 title:data.title,
                 content:data.content,
@@ -37,8 +38,9 @@ const notesController ={
             .send({message:"Note could not be created", error:error, status:400})
         }
     },
-    updateNota: async(data, res)=>{
+    updateNota: async(req, res)=>{
         try{
+            const data = req.body;
             const datos = await Note.findByIdAndUpdate(data.id, {
                 title:data.title,
                 content:data.content,
@@ -57,15 +59,11 @@ const notesController ={
             res.status(400).send({message:"Note could not be updated", error:error})
         }
     },
-    deleteNote: async(id,req, res)=>{
+    deleteNote: async(req, res)=>{
         try {
-            const user = req.user?.email;
-            const noteToBeDeleted = await Note.findById({_id:id});
-            if(noteToBeDeleted.user != user){
-                res.status(401).json({ message: "Not allowed to delete this note", error: err.message, status: 400 });
-            }
+            const noteId = req.params.id;
+            const doc = await Note.updateOne({ _id: noteId }, { $set: { active: false } });
             
-            const doc = await Note.updateOne({ _id: id }, { $set: { active: false } });
             if (doc.nModified === 0) {
                 res.status(404).json({ message: "Note not found", status: 404 });
             } else {

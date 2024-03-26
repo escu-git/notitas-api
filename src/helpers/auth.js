@@ -1,10 +1,10 @@
 
 const auth = {
-    checkLoggedUser: (req, res, next)=>{
-        if(req.user()){
+    userIsAuthenticated: (req, res, next)=>{
+        if(req.isAuthenticated()){
             next();
         }else{
-            res.redirect('/')
+            res.status(401).send({message:'User is not logged in', status:401});
         }
     }
 }

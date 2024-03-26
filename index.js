@@ -38,14 +38,15 @@ app.use(passport.session());
 //Auth
 app.use("/auth", (req, res, next) => {
     console.log('----- /AUTH INFO:------')
-    console.log("Session data:", req.session);
-    console.log("Cookies:", req.cookies);
+    // console.log("Session data:", req.session);
+    // console.log("Cookies:", req.cookies);
+    console.log(req.user)
     console.log('-----------------------')
     next();
   }, authRouter);
 
-// app.use("/*", auth.checkLoggedUser); //Check if the user is logged in to access any route except / and /register
-app.use("/notes", notesRouter );
+
+app.use("/notes",auth.userIsAuthenticated, notesRouter );
 app.use("/user", userRouter );
 
 
