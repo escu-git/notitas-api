@@ -45,6 +45,10 @@ const noteSchema = new Schema({
         type:Boolean,
         default:true
     },
+    color:{
+        type:String,
+        default: "#757de8"
+    }
     // _id:{
     //     type:String,
     //     required:false

@@ -26,7 +26,8 @@ const notesController ={
                     active:data.reminder.active,
                     date:data.reminder.date,
                     mode:data.reminder.mode
-                }
+                },
+                color:data.color
             })
     
             datos.save()
@@ -50,7 +51,8 @@ const notesController ={
                     active:data.reminder.active,
                     date:data.reminder.date,
                     mode:data.reminder.mode
-                }
+                },
+                color:data.color
             })
             datos.save()
             .then(noteData=>res.status(200).send({message:"Note updated succesfully", data: noteData}));

@@ -9,6 +9,7 @@ const mongooseConnect = require('./src/config/moongose-connection');
 const authRouter = require('./src/routes/authRouter');
 const notesRouter = require('./src/routes/notesRouter');
 const userRouter = require('./src/routes/userRouter');
+const friendsRouter = require('./src/routes/friendsRouter');
 const auth = require('./src/helpers/auth');
 require('dotenv').config();
 const cookies = require("cookie-parser");
@@ -39,15 +40,15 @@ app.use(passport.session());
 app.use("/auth", (req, res, next) => {
     console.log('----- /AUTH INFO:------')
     // console.log("Session data:", req.session);
-    // console.log("Cookies:", req.cookies);
+    console.log("Cookie:", req.cookies);
     console.log(req.user)
     console.log('-----------------------')
     next();
   }, authRouter);
 
-
 app.use("/notes",auth.userIsAuthenticated, notesRouter );
 app.use("/user", userRouter );
+app.use("/friends", auth.userIsAuthenticated, friendsRouter );
 
 
 mongooseConnect();

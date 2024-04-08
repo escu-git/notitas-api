@@ -9,7 +9,7 @@ const databaseUrl = `mongodb+srv://${user}:${password}@cluster0.sre7ibb.mongodb.
 function mongooseConnect(){
     mongoose.connect(databaseUrl)
       .then(() => {
-        console.log('Connected to the database');
+        console.log('Connected to the database mongo');
       })
       .catch((error) => {
         console.error('Error connecting to the database:', error);
